@@ -43,7 +43,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             "All I have is Java basics and a wide smile, but I want to learn and achieve more. Eager to build a career in Java development." +
             " Ready to learn and work 24/7 to get better!";
     static final String EDUCATION_TEXT = "I studied on my own, taking online courses. Here is an example of sites where I have received my education.";
-    static final String PORTFOLIO_TEXT = "";
+    static final String PORTFOLIO_TEXT = "This is my portfolio. Here you can find projects that I have developed. They are constantly being improved and updated.";
     static final String SOCIALS_TEXT = "Glad to see you here. Here you can find any of my social networks. I look forward to your connection.";
 
     public TelegramBot(BotConfig config) {
@@ -168,6 +168,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         try {
             sendMassage(chatId, ABOUT_TEXT);
+
             Thread.sleep(1000);
             sendMassageButton(chatId, EDUCATION_DATA, "My Education", educationButtonText, ":trophy:");
         } catch (Exception ignored) {}
@@ -188,12 +189,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         try {
             sendMassage(chatId, EDUCATION_TEXT);
+
             Thread.sleep(2500);
             sendMassage(chatId, educationSite1);
+
             Thread.sleep(2000);
             sendMassage(chatId, educationSite2);
+
             Thread.sleep(2000);
             sendMassage(chatId, educationSite3);
+
             Thread.sleep(1000);
             sendMassageButton(chatId, PORTFOLIO_DATA, "My Portfolio", portfolioButtonText, ":rocket:");
         } catch (Exception ignored) {}
@@ -202,9 +207,26 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void portfolioCommandReceived(long chatId) {
 
         String socialButtonText = "Go to my social media, click /socials or press the button below.";
+        String project1 = "Sidroded Resume Bot - is a Telegram bot written in Java. Built with Maven using Spring technology. " +
+                "It works constantly running on the Google Cloud server. You can see the code on GitHub.\n\n" +
+                "https://github.com/Sidroded/SidrodedResumeTelegramBot.git\n" +
+                "https://t.me/SidrodedResumeBot";
+        String project2 = "Resume WebSite - This site is written in HTML and CSS. " +
+                "One-page site where you can find out information about me. The host is on a free platform. You can see the code on GitHub.\n\n" +
+                "https://github.com/Sidroded/Resume.git\n" +
+                "https://sidroded-resume.netlify.app";
+
         try {
-            sendMassage(chatId, IN_DEV_TEXT);
+            sendMassage(chatId, PORTFOLIO_TEXT);
+
             Thread.sleep(1000);
+            sendMassage(chatId, EmojiParser.parseToUnicode(":coffee: " + project1));
+
+            Thread.sleep(2000);
+            sendMassage(chatId, EmojiParser.parseToUnicode(":coffee: " + project2));
+
+            Thread.sleep(2000);
+
             sendMassageButton(chatId, SOCIALS_DATA, "My Social Media", socialButtonText, ":iphone:");
         } catch (Exception ignored) {}
 
