@@ -1,6 +1,7 @@
 package com.Sidroded.SidrodedResumeBot.service;
 
 import com.Sidroded.SidrodedResumeBot.config.BotConfig;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -20,20 +21,26 @@ import java.util.List;
 public class TelegramBot extends TelegramLongPollingBot {
 
     final BotConfig config;
-
+    static final String IN_DEV_TEXT = "This part is still under development.";
     static final String HELP_TEXT = "This bot was created by Daniil Deinekin (Sidroded). \n" +
             "You can use menu to get different information about me. \n\n" +
-            "This bot is under development, so some features may not be available. \n" +
-            "Info about menu soon. \n\n" +
-            "Have a good day :з";
+            "This bot is under development, so some features may not be available. \n\n" +
+            "Type /start to start this bot, and see information about me. \n" +
+            "Type /about Let me introduce myself." +
+            "Type /education to see info about my education.\n" +
+            "Type /portfolio to see my projects.\n" +
+            "Type /socials to see all my social media.\n" +
+            "Type /help to see this massage again.\n";
 
     public TelegramBot(BotConfig config) {
         this.config = config;
         List<BotCommand> listOfCommands = new ArrayList<>();
+        listOfCommands.add(new BotCommand("/start", "Show welcome massage"));
+        listOfCommands.add(new BotCommand("/about","Some info about who I'm"));
+        listOfCommands.add(new BotCommand("/education", "Info about education"));
         listOfCommands.add(new BotCommand("/portfolio", "Link on GitHub"));
         listOfCommands.add(new BotCommand("/socials","My social media"));
-        listOfCommands.add(new BotCommand("/myData","Get your data store"));
-        listOfCommands.add(new BotCommand("/help","How to use this bor"));
+        listOfCommands.add(new BotCommand("/help","How to use this bot"));
         listOfCommands.add(new BotCommand("/settings","Settings"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
@@ -61,31 +68,59 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "/start":
                     startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                     break;
+                case "/about":
+                    aboutCommandReceived(chatId);
+                    break;
+                case "/portfolio":
+                    portfolioCommandReceived(chatId);
+                    break;
+                case "/education":
+                    educationCommandReceived(chatId);
+                    break;
+                case "/socials":
+                    socialsCommandReceived(chatId);
+                    break;
                 case "/help":
-                    sandMassage(chatId, HELP_TEXT);
+                    sendMassage(chatId, HELP_TEXT);
                     break;
                 default:
-                    sandMassage(chatId, "Sorry, command was not recognized");
+                    sendMassage(chatId, "Sorry, command was not recognized");
             }
         }
     }
 
     private void startCommandReceived(long chatId, String name) {
 
-        String answer = "Hi, " + name + ", nice to meet you!";
+        String answer = EmojiParser.parseToUnicode( "Hi, " + name + ", nice to meet you!" + " :hand:");
         log.info("Replied to user " + name);
 
-        sandMassage(chatId, answer);
+        sendMassage(chatId, answer);
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {}
 
-        sandMassage(chatId, "This is my Resume-Bot. Do you want to know what he can do? :)");
-        sandMassage(chatId, "Please use special menu on left side.");
+        sendMassage(chatId, "My name is Daniil. And I wrote this resume-bot in Java to show you who I am.");
+        sendMassage(chatId, "As a first step, let me introduce myself. Please press /about to show main information about me.");
     }
 
-    private void sandMassage(long chatId, String massageSend) {
+    private void aboutCommandReceived(long chatId) {
+        sendMassage(chatId, IN_DEV_TEXT);
+    }
+
+    private void educationCommandReceived(long chatId) {
+        sendMassage(chatId, IN_DEV_TEXT);
+    }
+
+    private void portfolioCommandReceived(long chatId) {
+        sendMassage(chatId, IN_DEV_TEXT);
+    }
+
+    private void socialsCommandReceived(long chatId) {
+        sendMassage(chatId, IN_DEV_TEXT);
+    }
+
+    private void sendMassage(long chatId, String massageSend) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(massageSend);
