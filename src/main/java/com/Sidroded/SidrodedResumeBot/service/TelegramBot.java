@@ -14,11 +14,18 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
     final BotConfig config;
+
+    static final String HELP_TEXT = "This bot was created by Daniil Deinekin (Sidroded). \n" +
+            "You can use menu to get different information about me. \n\n" +
+            "This bot is under development, so some features may not be available. \n" +
+            "Info about menu soon. \n\n" +
+            "Have a good day :з";
 
     public TelegramBot(BotConfig config) {
         this.config = config;
@@ -54,11 +61,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "/start":
                     startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                     break;
-                case "n":
-                    sandMassage(chatId, "Why? :c");
-                    break;
-                case "y":
-                    sandMassage(chatId, "*Shows something*");
+                case "/help":
+                    sandMassage(chatId, HELP_TEXT);
                     break;
                 default:
                     sandMassage(chatId, "Sorry, command was not recognized");
@@ -74,11 +78,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         sandMassage(chatId, answer);
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {}
 
         sandMassage(chatId, "This is my Resume-Bot. Do you want to know what he can do? :)");
-        sandMassage(chatId, "Please send \"y\" or \"n\".");
+        sandMassage(chatId, "Please use special menu on left side.");
     }
 
     private void sandMassage(long chatId, String massageSend) {
