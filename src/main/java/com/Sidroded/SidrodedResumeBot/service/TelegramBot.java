@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     final BotConfig config;
     static final String IN_DEV_TEXT = "This part is still under development.";
+    static final String ABOUT_DATA = "ABOUT";
     static final String HELP_TEXT = "This bot was created by Daniil Deinekin (Sidroded). \n" +
             "You can use menu to get different information about me. \n\n" +
             "This bot is under development, so some features may not be available. \n\n" +
@@ -86,10 +89,34 @@ public class TelegramBot extends TelegramLongPollingBot {
                 default:
                     sendMassage(chatId, "Sorry, command was not recognized");
             }
+        } else if(update.hasCallbackQuery()) {
+            String callbackData = update.getCallbackQuery().getData();
+            long massageId = update.getCallbackQuery().getMessage().getMessageId();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            if (callbackData.equals(ABOUT_DATA)) {
+                aboutCommandReceived(chatId);
+            }
         }
     }
 
     private void startCommandReceived(long chatId, String name) {
+        SendMessage aboutMassage = new SendMessage();
+        aboutMassage.setChatId(String.valueOf(chatId));
+        aboutMassage.setText("As a first step, let me introduce myself. Please press /about to show main information about me.");
+
+        InlineKeyboardMarkup markupinLine = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
+        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
+        var button = new InlineKeyboardButton();
+
+        button.setText(EmojiParser.parseToUnicode("About me " + ":blush:"));
+        button.setCallbackData(ABOUT_DATA);
+
+        rowInLine.add(button);
+        rowsInLine.add(rowInLine);
+        markupinLine.setKeyboard(rowsInLine);
+        aboutMassage.setReplyMarkup(markupinLine);
 
         String answer = EmojiParser.parseToUnicode( "Hi, " + name + ", nice to meet you!" + " :hand:");
         log.info("Replied to user " + name);
@@ -101,7 +128,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (InterruptedException e) {}
 
         sendMassage(chatId, "My name is Daniil. And I wrote this resume-bot in Java to show you who I am.");
-        sendMassage(chatId, "As a first step, let me introduce myself. Please press /about to show main information about me.");
+
+        try {
+            execute(aboutMassage);
+        } catch (TelegramApiException e) {
+            log.error("Error occurred" + e.getMessage());
+        }
+        //sendMassage(chatId, "As a first step, let me introduce myself. Please press /about to show main information about me.");
     }
 
     private void aboutCommandReceived(long chatId) {
