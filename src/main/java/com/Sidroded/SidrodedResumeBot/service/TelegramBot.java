@@ -32,7 +32,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             "You can use menu to get different information about me. \n\n" +
             "This bot is under development, so some features may not be available. \n\n" +
             "Type /start to start this bot, and see information about me. \n" +
-            "Type /about Let me introduce myself." +
+            "Type /about to learn more about me.\n" +
             "Type /education to see info about my education.\n" +
             "Type /portfolio to see my projects.\n" +
             "Type /socials to see all my social media.\n" +
@@ -42,7 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             "I started taking courses and reading books like \"Java the complete reference\", \"Introducing Maven\", \"Head First Java\". " +
             "All I have is Java basics and a wide smile, but I want to learn and achieve more. Eager to build a career in Java development." +
             " Ready to learn and work 24/7 to get better!";
-    static final String EDUCATION_TEXT = "I studied on my own in online courses. Here is an example of sites where I received my education.";
+    static final String EDUCATION_TEXT = "I studied on my own, taking online courses. Here is an example of sites where I have received my education.";
     static final String PORTFOLIO_TEXT = "";
     static final String SOCIALS_TEXT = "Glad to see you here. Here you can find any of my social networks. I look forward to your connection.";
 
@@ -129,7 +129,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         SendMessage aboutMassage = new SendMessage();
         aboutMassage.setChatId(String.valueOf(chatId));
-        aboutMassage.setText("As a first step, let me introduce myself. Please click /about or press the button to show main information about me.");
+        aboutMassage.setText("As a first step, let me introduce myself. Please click /about or press the button below to show main information about me.");
 
         InlineKeyboardMarkup markupinLine = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
@@ -153,7 +153,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             Thread.sleep(500);
         } catch (InterruptedException e) {}
 
-        sendMassage(chatId, "My name is Daniil. And I wrote this resume-bot in Java to show you who I am.");
+        sendMassage(chatId, "My name is Daniil. And I wrote this resume-bot in Java to describe myself and my professional way.");
 
         try {
             execute(aboutMassage);
@@ -164,7 +164,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void aboutCommandReceived(long chatId) {
 
-        String educationButtonText = "Go to my education click /education or press the button.";
+        String educationButtonText = "Go to my education, click /education or press the button below.";
 
         try {
             sendMassage(chatId, ABOUT_TEXT);
@@ -176,14 +176,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void educationCommandReceived(long chatId) {
 
-        String educationSite1 = "My first training site is called CodeGym. On it I learned the basics of JavaCore. " +
-                "Solved more than 500 tasks for real practical experience, and I'm not going to stop.\n\n" +
+        String educationSite1 = "My first educational site called CodeGym. There I have learned basics of JavaCore. " +
+                "Solved more than 500 tasks, getting real practical experience, and I'm not going to stop.\n\n" +
                 "https://codegym.cc";
-        String educationSite2 = "Now I am studying at EPAM online university. I like learning and improving.\n\n" +
+        String educationSite2 = "Now I am studying at EPAM online university. " +
+                "I am passionate about learning and getting to know new subjects and areas. To improve is to live - this is my motto.\n\n" +
                 "https://epam.com";
         String educationSite3 = "I am also constantly improving on the CodeWars website. If you want you can challenge me!\n\n" +
                 "https://www.codewars.com/users/Sidroded";
-        String portfolioButtonText = "Go to my portfolio click /portfolio or press the button.";
+        String portfolioButtonText = "Go to my portfolio, click /portfolio or press the button below.";
 
         try {
             sendMassage(chatId, EDUCATION_TEXT);
@@ -200,7 +201,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void portfolioCommandReceived(long chatId) {
 
-        String socialButtonText = "Go to my social media click /socials or press the button.";
+        String socialButtonText = "Go to my social media, click /socials or press the button below.";
         try {
             sendMassage(chatId, IN_DEV_TEXT);
             Thread.sleep(1000);
