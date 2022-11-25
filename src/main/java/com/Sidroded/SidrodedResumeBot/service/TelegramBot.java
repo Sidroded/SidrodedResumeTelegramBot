@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
@@ -151,7 +153,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException ignored) {}
+
+        sendImageFromUrl("https://sidroded-resume.netlify.app/img/img_resume.jpg", chatId);
 
         sendMassage(chatId, "My name is Daniil. And I wrote this resume-bot in Java to describe myself and my professional way.");
 
@@ -269,17 +273,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (Exception e) {}
     }
 
-    /*private void sendPhoto(long chatId, File photo) {
-        var message = new SendPhoto()
-                .setChatId(chatId)
-                .setCaption("Caption")
-                .setPhoto(photo);
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {}
-
-    }*/
-
     private void sendMassage(long chatId, String massageSend) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
@@ -288,6 +281,19 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(sendMessage);
         } catch (TelegramApiException e) {
             log.error("Error occurred" + e.getMessage());
+        }
+    }
+
+    public void sendImageFromUrl(String url, long chatId) {
+
+        SendPhoto sendPhotoRequest = new SendPhoto();
+        sendPhotoRequest.setChatId(String.valueOf(chatId));
+        sendPhotoRequest.setPhoto(new InputFile(url));
+
+        try {
+            execute(sendPhotoRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 }
